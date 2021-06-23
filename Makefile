@@ -4,7 +4,14 @@ build:
 	go build -o bin/app.out $(APP)
 
 run:
-	go run $(APP) local_config
+	go run $(APP)
+
+lint:
+	go fmt ./...
+	golangci-lint run
+
+swag:
+	swag init --parseDependency -d ./internal/delivery -o ./docs/swagger -g handler.go
 
 SCHEMA=./migrations
 DB='postgres://postgres:1234@127.0.0.1:5432/sellerx_task?sslmode=disable'

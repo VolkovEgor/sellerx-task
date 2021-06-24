@@ -14,9 +14,11 @@ type User interface {
 
 type Chat interface {
 	Create(user *model.Chat) (int, error)
+	ExistenceCheck(chatId int) error
 }
 
 type Message interface {
+	Create(message *model.Message) (int, error)
 }
 
 type Repository struct {
@@ -27,7 +29,8 @@ type Repository struct {
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
-		User: postgres.NewUserPg(db),
-		Chat: postgres.NewChatPg(db),
+		User:    postgres.NewUserPg(db),
+		Chat:    postgres.NewChatPg(db),
+		Message: postgres.NewMessagePg(db),
 	}
 }

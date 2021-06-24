@@ -11,6 +11,7 @@ const (
 	usersTable     = "users"
 	chatsTable     = "chats"
 	chatUsersTable = "chat_users"
+	messagesTable  = "messages"
 )
 
 type Config struct {

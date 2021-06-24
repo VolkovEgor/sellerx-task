@@ -53,7 +53,7 @@ func (h *Handler) createChat(ctx echo.Context) error {
 
 	chatId, err := h.services.Chat.Create(chat)
 	if err != nil {
-		if err == errMes.ErrWrongChatname {
+		if err == errMes.ErrWrongChatname || err == errMes.ErrNoChatUsers || err == errMes.ErrChatUserNotExists {
 			return SendError(ctx, http.StatusBadRequest, err)
 		}
 		return SendError(ctx, http.StatusInternalServerError, err)

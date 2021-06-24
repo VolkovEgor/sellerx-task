@@ -48,3 +48,10 @@ func (r *ChatPg) Create(chat *model.Chat) (int, error) {
 
 	return chatId, tx.Commit()
 }
+
+func (r *ChatPg) ExistenceCheck(chatId int) error {
+	var tmp int
+	query := fmt.Sprintf(`SELECT id FROM %s WHERE id = $1`, chatsTable)
+	row := r.db.QueryRow(query, chatId)
+	return row.Scan(&tmp)
+}

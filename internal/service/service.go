@@ -14,6 +14,7 @@ type Chat interface {
 }
 
 type Message interface {
+	Create(message *model.Message) (int, error)
 }
 
 type Service struct {
@@ -24,7 +25,8 @@ type Service struct {
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
-		User: NewUserService(repos.User),
-		Chat: NewChatService(repos.Chat, repos.User),
+		User:    NewUserService(repos.User),
+		Chat:    NewChatService(repos.Chat, repos.User),
+		Message: NewMessageService(repos.Message, repos.User, repos.Chat),
 	}
 }

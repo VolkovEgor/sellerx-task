@@ -48,6 +48,7 @@ func (h *Handler) Init(router *echo.Echo) {
 	{
 		h.initUserRoutes(api)
 		h.initChatRoutes(api)
+		h.initMessageRoutes(api)
 	}
 }
 

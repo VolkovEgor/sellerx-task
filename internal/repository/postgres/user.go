@@ -8,10 +8,6 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-const (
-	NumElementsInPage = 10
-)
-
 type UserPg struct {
 	db *sqlx.DB
 }
@@ -32,4 +28,11 @@ func (r *UserPg) Create(user *model.User) (int, error) {
 	}
 
 	return userId, nil
+}
+
+func (r *UserPg) ExistenceCheck(userId int) error {
+	var tmp int
+	query := fmt.Sprintf(`SELECT id FROM %s WHERE id = $1`, usersTable)
+	row := r.db.QueryRow(query, userId)
+	return row.Scan(&tmp)
 }

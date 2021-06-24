@@ -15,4 +15,4 @@
 # vendor/
 
 # Swagger files
-docs/swagger/*
+docs/swagger/

@@ -47,6 +47,7 @@ func (h *Handler) Init(router *echo.Echo) {
 	api := router.Group("")
 	{
 		h.initUserRoutes(api)
+		h.initChatRoutes(api)
 	}
 }
 

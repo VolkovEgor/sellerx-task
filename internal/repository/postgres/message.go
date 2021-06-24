@@ -29,3 +29,14 @@ func (r *MessagePg) Create(message *model.Message) (int, error) {
 
 	return messageId, nil
 }
+
+func (r *MessagePg) GetAllForChat(chatId int) ([]*model.Message, error) {
+	messages := []*model.Message{}
+	query := fmt.Sprintf(
+		`SELECT id, chat_id, author_id, text, created_at
+		FROM %s WHERE chat_id = $1
+		ORDER BY created_at`, messagesTable)
+
+	err := r.db.Select(&messages, query, chatId)
+	return messages, err
+}

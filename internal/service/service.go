@@ -16,6 +16,7 @@ type Chat interface {
 
 type Message interface {
 	Create(message *model.Message) (int, error)
+	GetAllForChat(chatId int) ([]*model.Message, error)
 }
 
 type Service struct {

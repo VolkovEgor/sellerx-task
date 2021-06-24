@@ -14,6 +14,7 @@ func (h *Handler) initMessageRoutes(api *echo.Group) {
 	messages := api.Group("/messages")
 	{
 		messages.POST("/add", h.createMessage)
+		messages.POST("/get", h.getAllMessageForChat)
 	}
 }
 
@@ -62,4 +63,45 @@ func (h *Handler) createMessage(ctx echo.Context) error {
 	}
 
 	return ctx.JSON(http.StatusOK, idResponse{messageId})
+}
+
+type allMessagesForChatInput struct {
+	ChatId int `json:"chat"`
+}
+
+// @Summary Get All Messages For Chat
+// @Tags messages
+// @Description Get all messages for chat
+// @ModuleID getAllMessagesForChat
+// @Accept json
+// @Produce json
+// @Param input body allMessagesForChatInput true "chat id input"
+// @Success 200 {array} model.Message
+// @Failure 400 {object} errorResponse
+// @Failure 404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /messages/get [post]
+func (h *Handler) getAllMessageForChat(ctx echo.Context) error {
+	var input allMessagesForChatInput
+
+	if err := ctx.Bind(&input); err != nil {
+		return SendError(ctx, http.StatusBadRequest, err)
+	}
+
+	if _, err := govalidator.ValidateStruct(input); err != nil {
+		return SendError(ctx, http.StatusBadRequest, err)
+	}
+
+	chatId := input.ChatId
+
+	messages, err := h.services.Message.GetAllForChat(chatId)
+	if err != nil {
+		if err == errMes.ErrChatNotExists {
+			return SendError(ctx, http.StatusBadRequest, err)
+		}
+		return SendError(ctx, http.StatusInternalServerError, err)
+	}
+
+	return ctx.JSON(http.StatusOK, messages)
 }

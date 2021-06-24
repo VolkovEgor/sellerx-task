@@ -73,7 +73,7 @@ type allChatsForUserInput struct {
 // @ModuleID getAllChatsForUser
 // @Accept json
 // @Produce json
-// @Param input body allChatsForUserInput true "chat input"
+// @Param input body allChatsForUserInput true "user id input"
 // @Success 200 {array} model.Chat
 // @Failure 400 {object} errorResponse
 // @Failure 404 {object} errorResponse

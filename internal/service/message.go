@@ -53,3 +53,18 @@ func (s *MessageService) Create(message *model.Message) (int, error) {
 	message.CreatedAt = time.Now().Unix()
 	return s.repo.Create(message)
 }
+
+func (s *MessageService) GetAllForChat(chatId int) ([]*model.Message, error) {
+	if chatId <= 0 {
+		return nil, errMes.ErrChatNotExists
+	}
+
+	if err := s.chatRepo.ExistenceCheck(chatId); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errMes.ErrChatNotExists
+		}
+		return nil, err
+	}
+
+	return s.repo.GetAllForChat(chatId)
+}

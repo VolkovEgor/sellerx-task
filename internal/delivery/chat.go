@@ -54,7 +54,8 @@ func (h *Handler) createChat(ctx echo.Context) error {
 
 	chatId, err := h.services.Chat.Create(chat)
 	if err != nil {
-		if err == errMes.ErrWrongChatname || err == errMes.ErrNoChatUsers || err == errMes.ErrUserNotExists {
+		if err == errMes.ErrWrongChatname || err == errMes.ErrNoChatUsers || err == errMes.ErrEmptyUserId ||
+			err == errMes.ErrRecurringUsers || err == errMes.ErrUserNotExists {
 			return SendError(ctx, http.StatusBadRequest, err)
 		}
 		return SendError(ctx, http.StatusInternalServerError, err)
@@ -95,7 +96,7 @@ func (h *Handler) getAllChatsForUser(ctx echo.Context) error {
 
 	chats, err := h.services.Chat.GetAllForUser(userId)
 	if err != nil {
-		if err == errMes.ErrUserNotExists {
+		if err == errMes.ErrUserNotExists || err == errMes.ErrEmptyUserId {
 			return SendError(ctx, http.StatusBadRequest, err)
 		}
 		return SendError(ctx, http.StatusInternalServerError, err)

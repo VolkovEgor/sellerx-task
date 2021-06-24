@@ -23,11 +23,8 @@ func (r *UserPg) Create(user *model.User) (string, error) {
 		VALUES ($1, $2) RETURNING id`, usersTable)
 
 	row := r.db.QueryRow(query, user.Username, user.CreatedAt)
-	if err := row.Scan(&userId); err != nil {
-		return "", err
-	}
-
-	return userId, nil
+	err := row.Scan(&userId)
+	return userId, err
 }
 
 func (r *UserPg) ExistenceCheck(userId string) error {

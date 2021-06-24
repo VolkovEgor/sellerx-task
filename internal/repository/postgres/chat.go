@@ -96,6 +96,14 @@ func (r *ChatPg) GetAllForUser(userId string) ([]*model.Chat, error) {
 	return chats, tx.Commit()
 }
 
+func (r *ChatPg) GetById(chatId string) (*model.Chat, error) {
+	chat := &model.Chat{}
+	query := fmt.Sprintf(`SELECT * FROM %s WHERE id = $1`, chatsTable)
+	row := r.db.QueryRow(query, chatId)
+	err := row.Scan(&query)
+	return chat, err
+}
+
 func (r *ChatPg) ExistenceCheck(chatId string) error {
 	var tmp string
 	query := fmt.Sprintf(`SELECT id FROM %s WHERE id = $1`, chatsTable)

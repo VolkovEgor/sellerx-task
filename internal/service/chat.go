@@ -27,7 +27,17 @@ func (s *ChatService) Create(chat *model.Chat) (string, error) {
 		return "", errMes.ErrNoChatUsers
 	}
 
+	set := make(map[string]bool)
 	for _, userId := range chat.Users {
+		if userId == "" {
+			return "", errMes.ErrEmptyUserId
+		}
+
+		if set[userId] {
+			return "", errMes.ErrRecurringUsers
+		}
+		set[userId] = true
+
 		if err := s.userRepo.ExistenceCheck(userId); err != nil {
 			if err == sql.ErrNoRows {
 				return "", errMes.ErrUserNotExists
@@ -42,7 +52,7 @@ func (s *ChatService) Create(chat *model.Chat) (string, error) {
 
 func (s *ChatService) GetAllForUser(userId string) ([]*model.Chat, error) {
 	if userId == "" {
-		return nil, errMes.ErrUserNotExists
+		return nil, errMes.ErrEmptyUserId
 	}
 
 	if err := s.userRepo.ExistenceCheck(userId); err != nil {

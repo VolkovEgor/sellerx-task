@@ -23,11 +23,8 @@ func (r *MessagePg) Create(message *model.Message) (string, error) {
 		VALUES ($1, $2, $3, $4) RETURNING id`, messagesTable)
 
 	row := r.db.QueryRow(query, message.ChatId, message.AuthorId, message.Text, message.CreatedAt)
-	if err := row.Scan(&messageId); err != nil {
-		return "", err
-	}
-
-	return messageId, nil
+	err := row.Scan(&messageId)
+	return messageId, err
 }
 
 func (r *MessagePg) GetAllForChat(chatId string) ([]*model.Message, error) {

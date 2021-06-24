@@ -15,6 +15,7 @@ type User interface {
 type Chat interface {
 	Create(user *model.Chat) (string, error)
 	GetAllForUser(userId string) ([]*model.Chat, error)
+	GetById(chatId string) (*model.Chat, error)
 	ExistenceCheck(chatId string) error
 }
 

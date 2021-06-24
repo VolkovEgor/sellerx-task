@@ -17,7 +17,7 @@ type errorResponse struct {
 }
 
 type idResponse struct {
-	Id int `json:"id"`
+	Id string `json:"id"`
 }
 
 type Handler struct {

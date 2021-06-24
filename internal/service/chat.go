@@ -18,21 +18,21 @@ func NewChatService(repo repository.Chat, userRepo repository.User) *ChatService
 	return &ChatService{repo: repo, userRepo: userRepo}
 }
 
-func (s *ChatService) Create(chat *model.Chat) (int, error) {
+func (s *ChatService) Create(chat *model.Chat) (string, error) {
 	if chat.Name == "" || len(chat.Name) > 50 {
-		return 0, errMes.ErrWrongChatname
+		return "", errMes.ErrWrongChatname
 	}
 
 	if len(chat.Users) == 0 {
-		return 0, errMes.ErrNoChatUsers
+		return "", errMes.ErrNoChatUsers
 	}
 
 	for _, userId := range chat.Users {
 		if err := s.userRepo.ExistenceCheck(userId); err != nil {
 			if err == sql.ErrNoRows {
-				return 0, errMes.ErrUserNotExists
+				return "", errMes.ErrUserNotExists
 			}
-			return 0, err
+			return "", err
 		}
 	}
 
@@ -40,8 +40,8 @@ func (s *ChatService) Create(chat *model.Chat) (int, error) {
 	return s.repo.Create(chat)
 }
 
-func (s *ChatService) GetAllForUser(userId int) ([]*model.Chat, error) {
-	if userId <= 0 {
+func (s *ChatService) GetAllForUser(userId string) ([]*model.Chat, error) {
+	if userId == "" {
 		return nil, errMes.ErrUserNotExists
 	}
 

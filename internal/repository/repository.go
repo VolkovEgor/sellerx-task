@@ -8,19 +8,19 @@ import (
 )
 
 type User interface {
-	Create(user *model.User) (int, error)
-	ExistenceCheck(userId int) error
+	Create(user *model.User) (string, error)
+	ExistenceCheck(userId string) error
 }
 
 type Chat interface {
-	Create(user *model.Chat) (int, error)
-	GetAllForUser(userId int) ([]*model.Chat, error)
-	ExistenceCheck(chatId int) error
+	Create(user *model.Chat) (string, error)
+	GetAllForUser(userId string) ([]*model.Chat, error)
+	ExistenceCheck(chatId string) error
 }
 
 type Message interface {
-	Create(message *model.Message) (int, error)
-	GetAllForChat(chatId int) ([]*model.Message, error)
+	Create(message *model.Message) (string, error)
+	GetAllForChat(chatId string) ([]*model.Message, error)
 }
 
 type Repository struct {

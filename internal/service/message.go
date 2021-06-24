@@ -23,39 +23,39 @@ func NewMessageService(repo repository.Message, userRepo repository.User, chatRe
 	}
 }
 
-func (s *MessageService) Create(message *model.Message) (int, error) {
+func (s *MessageService) Create(message *model.Message) (string, error) {
 	if message.Text == "" {
-		return 0, errMes.ErrWrongTextMes
+		return "", errMes.ErrWrongTextMes
 	}
 
-	if message.ChatId <= 0 {
-		return 0, errMes.ErrChatNotExists
+	if message.ChatId == "" {
+		return "", errMes.ErrChatNotExists
 	}
 
-	if message.AuthorId <= 0 {
-		return 0, errMes.ErrMesAuthorNotExists
+	if message.AuthorId == "" {
+		return "", errMes.ErrMesAuthorNotExists
 	}
 
 	if err := s.chatRepo.ExistenceCheck(message.ChatId); err != nil {
 		if err == sql.ErrNoRows {
-			return 0, errMes.ErrChatNotExists
+			return "", errMes.ErrChatNotExists
 		}
-		return 0, err
+		return "", err
 	}
 
 	if err := s.userRepo.ExistenceCheck(message.AuthorId); err != nil {
 		if err == sql.ErrNoRows {
-			return 0, errMes.ErrMesAuthorNotExists
+			return "", errMes.ErrMesAuthorNotExists
 		}
-		return 0, err
+		return "", err
 	}
 
 	message.CreatedAt = time.Now().Unix()
 	return s.repo.Create(message)
 }
 
-func (s *MessageService) GetAllForChat(chatId int) ([]*model.Message, error) {
-	if chatId <= 0 {
+func (s *MessageService) GetAllForChat(chatId string) ([]*model.Message, error) {
+	if chatId == "" {
 		return nil, errMes.ErrChatNotExists
 	}
 

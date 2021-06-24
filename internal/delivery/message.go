@@ -19,8 +19,8 @@ func (h *Handler) initMessageRoutes(api *echo.Group) {
 }
 
 type messageInput struct {
-	ChatId   int    `json:"chat"`
-	AuthorId int    `json:"author"`
+	ChatId   string `json:"chat"`
+	AuthorId string `json:"author"`
 	Text     string `json:"text"`
 }
 
@@ -66,7 +66,7 @@ func (h *Handler) createMessage(ctx echo.Context) error {
 }
 
 type allMessagesForChatInput struct {
-	ChatId int `json:"chat"`
+	ChatId string `json:"chat"`
 }
 
 // @Summary Get All Messages For Chat

@@ -16,9 +16,9 @@ func NewUserService(repo repository.User) *UserService {
 	return &UserService{repo: repo}
 }
 
-func (s *UserService) Create(user *model.User) (int, error) {
+func (s *UserService) Create(user *model.User) (string, error) {
 	if user.Username == "" || len(user.Username) > 50 {
-		return 0, errMes.ErrWrongUsername
+		return "", errMes.ErrWrongUsername
 	}
 
 	user.CreatedAt = time.Now().Unix()

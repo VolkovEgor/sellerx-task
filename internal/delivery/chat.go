@@ -19,8 +19,8 @@ func (h *Handler) initChatRoutes(api *echo.Group) {
 }
 
 type chatInput struct {
-	Name  string `json:"name" valid:"length(1|50)"`
-	Users []int  `json:"users"`
+	Name  string   `json:"name" valid:"length(1|50)"`
+	Users []string `json:"users"`
 }
 
 // @Summary Create Chat
@@ -64,7 +64,7 @@ func (h *Handler) createChat(ctx echo.Context) error {
 }
 
 type allChatsForUserInput struct {
-	UserId int `json:"user"`
+	UserId string `json:"user"`
 }
 
 // @Summary Get All Chats For User

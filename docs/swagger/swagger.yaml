@@ -1,9 +1,65 @@
-basePath: /api/
+basePath: /
+definitions:
+  handler.errorResponse:
+    properties:
+      error_code:
+        type: integer
+      message:
+        type: string
+    type: object
+  handler.idResponse:
+    properties:
+      id:
+        type: integer
+    type: object
+  handler.userInput:
+    properties:
+      username:
+        type: string
+    type: object
 host: localhost:9000
 info:
   contact: {}
   description: API Server for SellerX Task
-  title: SellerX Task
+  title: SellerX Task API
   version: "1.0"
-paths: {}
+paths:
+  /users/add:
+    post:
+      consumes:
+      - application/json
+      description: Create user
+      parameters:
+      - description: user input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.userInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.idResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Create User
+      tags:
+      - users
 swagger: "2.0"

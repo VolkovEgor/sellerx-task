@@ -2,7 +2,7 @@ port: ":9000"
 
 db:
     username: "postgres"
-    password: "123matan123"
+    password: "1234"
     host: "localhost"
     port: "5432"
     dbname: "sellerx_task"

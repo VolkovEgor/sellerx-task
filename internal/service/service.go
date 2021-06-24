@@ -11,6 +11,7 @@ type User interface {
 
 type Chat interface {
 	Create(user *model.Chat) (int, error)
+	GetAllForUser(userId int) ([]*model.Chat, error)
 }
 
 type Message interface {

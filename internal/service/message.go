@@ -33,7 +33,7 @@ func (s *MessageService) Create(message *model.Message) (int, error) {
 	}
 
 	if message.AuthorId <= 0 {
-		return 0, errMes.ErrAuthorNotExists
+		return 0, errMes.ErrMesAuthorNotExists
 	}
 
 	if err := s.chatRepo.ExistenceCheck(message.ChatId); err != nil {
@@ -45,7 +45,7 @@ func (s *MessageService) Create(message *model.Message) (int, error) {
 
 	if err := s.userRepo.ExistenceCheck(message.AuthorId); err != nil {
 		if err == sql.ErrNoRows {
-			return 0, errMes.ErrAuthorNotExists
+			return 0, errMes.ErrMesAuthorNotExists
 		}
 		return 0, err
 	}

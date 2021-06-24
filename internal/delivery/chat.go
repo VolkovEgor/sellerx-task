@@ -14,6 +14,7 @@ func (h *Handler) initChatRoutes(api *echo.Group) {
 	chats := api.Group("/chats")
 	{
 		chats.POST("/add", h.createChat)
+		chats.POST("/get", h.getAllChatsForUser)
 	}
 }
 
@@ -53,11 +54,52 @@ func (h *Handler) createChat(ctx echo.Context) error {
 
 	chatId, err := h.services.Chat.Create(chat)
 	if err != nil {
-		if err == errMes.ErrWrongChatname || err == errMes.ErrNoChatUsers || err == errMes.ErrChatUserNotExists {
+		if err == errMes.ErrWrongChatname || err == errMes.ErrNoChatUsers || err == errMes.ErrUserNotExists {
 			return SendError(ctx, http.StatusBadRequest, err)
 		}
 		return SendError(ctx, http.StatusInternalServerError, err)
 	}
 
 	return ctx.JSON(http.StatusOK, idResponse{chatId})
+}
+
+type allChatsForUserInput struct {
+	UserId int `json:"user"`
+}
+
+// @Summary Get All Chats For User
+// @Tags chats
+// @Description Get all chats for user
+// @ModuleID getAllChatsForUser
+// @Accept json
+// @Produce json
+// @Param input body allChatsForUserInput true "chat input"
+// @Success 200 {array} model.Chat
+// @Failure 400 {object} errorResponse
+// @Failure 404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /chats/get [post]
+func (h *Handler) getAllChatsForUser(ctx echo.Context) error {
+	var input allChatsForUserInput
+
+	if err := ctx.Bind(&input); err != nil {
+		return SendError(ctx, http.StatusBadRequest, err)
+	}
+
+	if _, err := govalidator.ValidateStruct(input); err != nil {
+		return SendError(ctx, http.StatusBadRequest, err)
+	}
+
+	userId := input.UserId
+
+	chats, err := h.services.Chat.GetAllForUser(userId)
+	if err != nil {
+		if err == errMes.ErrUserNotExists {
+			return SendError(ctx, http.StatusBadRequest, err)
+		}
+		return SendError(ctx, http.StatusInternalServerError, err)
+	}
+
+	return ctx.JSON(http.StatusOK, chats)
 }

@@ -55,7 +55,7 @@ func (h *Handler) createMessage(ctx echo.Context) error {
 
 	messageId, err := h.services.Message.Create(message)
 	if err != nil {
-		if err == errMes.ErrWrongTextMes || err == errMes.ErrAuthorNotExists || err == errMes.ErrChatNotExists {
+		if err == errMes.ErrWrongTextMes || err == errMes.ErrMesAuthorNotExists || err == errMes.ErrChatNotExists {
 			return SendError(ctx, http.StatusBadRequest, err)
 		}
 		return SendError(ctx, http.StatusInternalServerError, err)

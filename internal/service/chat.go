@@ -30,7 +30,7 @@ func (s *ChatService) Create(chat *model.Chat) (int, error) {
 	for _, userId := range chat.Users {
 		if err := s.userRepo.ExistenceCheck(userId); err != nil {
 			if err == sql.ErrNoRows {
-				return 0, errMes.ErrChatUserNotExists
+				return 0, errMes.ErrUserNotExists
 			}
 			return 0, err
 		}
@@ -38,4 +38,19 @@ func (s *ChatService) Create(chat *model.Chat) (int, error) {
 
 	chat.CreatedAt = time.Now().Unix()
 	return s.repo.Create(chat)
+}
+
+func (s *ChatService) GetAllForUser(userId int) ([]*model.Chat, error) {
+	if userId <= 0 {
+		return nil, errMes.ErrUserNotExists
+	}
+
+	if err := s.userRepo.ExistenceCheck(userId); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errMes.ErrUserNotExists
+		}
+		return nil, err
+	}
+
+	return s.repo.GetAllForUser(userId)
 }

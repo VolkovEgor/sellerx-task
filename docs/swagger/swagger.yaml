@@ -1,12 +1,22 @@
 basePath: /
 definitions:
+  handler.allChatsForUserInput:
+    properties:
+      user:
+        type: string
+    type: object
+  handler.allMessagesForChatInput:
+    properties:
+      chat:
+        type: string
+    type: object
   handler.chatInput:
     properties:
       name:
         type: string
       users:
         items:
-          type: integer
+          type: string
         type: array
     type: object
   handler.errorResponse:
@@ -19,11 +29,48 @@ definitions:
   handler.idResponse:
     properties:
       id:
-        type: integer
+        type: string
+    type: object
+  handler.messageInput:
+    properties:
+      author:
+        type: string
+      chat:
+        type: string
+      text:
+        type: string
     type: object
   handler.userInput:
     properties:
       username:
+        type: string
+    type: object
+  model.Chat:
+    properties:
+      created_at:
+        type: integer
+      id:
+        type: string
+      last_message_time:
+        type: integer
+      name:
+        type: string
+      users:
+        items:
+          type: string
+        type: array
+    type: object
+  model.Message:
+    properties:
+      author_id:
+        type: string
+      chat_id:
+        type: string
+      created_at:
+        type: integer
+      id:
+        type: string
+      text:
         type: string
     type: object
 host: localhost:9000
@@ -71,6 +118,124 @@ paths:
       summary: Create Chat
       tags:
       - chats
+  /chats/get:
+    post:
+      consumes:
+      - application/json
+      description: Get all chats for user
+      parameters:
+      - description: user id input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.allChatsForUserInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Chat'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get All Chats For User
+      tags:
+      - chats
+  /messages/add:
+    post:
+      consumes:
+      - application/json
+      description: Create message
+      parameters:
+      - description: message input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.messageInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.idResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Create Message
+      tags:
+      - messages
+  /messages/get:
+    post:
+      consumes:
+      - application/json
+      description: Get all messages for chat
+      parameters:
+      - description: chat id input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.allMessagesForChatInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Message'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get All Messages For Chat
+      tags:
+      - messages
   /users/add:
     post:
       consumes:

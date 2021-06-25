@@ -1,6 +1,13 @@
 package main
 
 import (
+	"context"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
 	handler "github.com/VolkovEgor/sellerx-task/internal/delivery"
 	"github.com/VolkovEgor/sellerx-task/internal/repository"
 	"github.com/VolkovEgor/sellerx-task/internal/repository/postgres"
@@ -37,8 +44,28 @@ func main() {
 	app.Use(middleware.Logger())
 	handlers.Init(app)
 
-	if err := app.Start(viper.GetString("port")); err != nil {
-		logrus.Fatalf("failed to listen: %s", err.Error())
+	go func() {
+		if err := app.Start(viper.GetString("port")); err != nil && err != http.ErrServerClosed {
+			logrus.Fatalf("failed to listen: %s", err.Error())
+		}
+	}()
+
+	logrus.Println("App started")
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	logrus.Println("Gracefully shutting down...")
+	if err := app.Shutdown(ctx); err != nil {
+		logrus.Errorf("error occured on server shutting down: %s", err.Error())
+	}
+
+	if err := db.Close(); err != nil {
+		logrus.Errorf("error occured on db connection close: %s", err.Error())
 	}
 }
 

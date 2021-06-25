@@ -1,0 +1,4 @@
+DROP TABLE iF EXISTS messages;
+DROP TABLE iF EXISTS chat_users;
+DROP TABLE iF EXISTS chats;
+DROP TABLE iF EXISTS users;

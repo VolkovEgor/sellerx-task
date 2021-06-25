@@ -20,7 +20,11 @@ import (
 )
 
 func main() {
-	if err := initConfig(); err != nil {
+	if len(os.Args) < 2 {
+		logrus.Fatalf("Usage: %v config_filename\n", os.Args[0])
+	}
+
+	if err := initConfig(os.Args[1]); err != nil {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
 
@@ -69,8 +73,8 @@ func main() {
 	}
 }
 
-func initConfig() error {
+func initConfig(filename string) error {
 	viper.AddConfigPath("config")
-	viper.SetConfigName("config")
+	viper.SetConfigName(filename)
 	return viper.ReadInConfig()
 }

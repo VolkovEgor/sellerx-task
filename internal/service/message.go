@@ -52,7 +52,7 @@ func (s *MessageService) Create(message *model.Message) (string, error) {
 	}
 
 	message.CreatedAt = time.Now().Unix()
-	if message.CreatedAt > chat.CreatedAt {
+	if message.CreatedAt < chat.CreatedAt {
 		return "", errMes.ErrWrongMesCreationTime
 	}
 

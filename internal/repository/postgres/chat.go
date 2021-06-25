@@ -98,9 +98,9 @@ func (r *ChatPg) GetAllForUser(userId string) ([]*model.Chat, error) {
 
 func (r *ChatPg) GetById(chatId string) (*model.Chat, error) {
 	chat := &model.Chat{}
-	query := fmt.Sprintf(`SELECT * FROM %s WHERE id = $1`, chatsTable)
+	query := fmt.Sprintf(`SELECT id, name, created_at FROM %s WHERE id = $1`, chatsTable)
 	row := r.db.QueryRow(query, chatId)
-	err := row.Scan(&query)
+	err := row.Scan(&chat.Id, &chat.Name, &chat.CreatedAt)
 	return chat, err
 }
 

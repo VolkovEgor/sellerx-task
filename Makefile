@@ -1,9 +1,9 @@
 APP=cmd/main.go
 
-build:
+local_build:
 	go build -o bin/app.out $(APP)
 
-run:
+local_run:
 	go run $(APP)
 
 # WARNING: before running tests need to create database 'postgres_test' in postgres localhost

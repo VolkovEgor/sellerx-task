@@ -48,7 +48,7 @@ func Test_E2E_App(t *testing.T) {
 	Convey("Given params", t, func() {
 		const (
 			expectedStatus = http.StatusOK
-			inputUsername  = `"First Uer"`
+			inputUsername  = `"First User"`
 		)
 		inputBody := fmt.Sprintf(`{"username": %s}`, inputUsername)
 
@@ -77,7 +77,7 @@ func Test_E2E_App(t *testing.T) {
 	Convey("Given params", t, func() {
 		const (
 			expectedStatus = http.StatusOK
-			inputUsername  = `"First Advert"`
+			inputUsername  = `"First User"`
 		)
 		inputBody := fmt.Sprintf(`{"username": %s}`, inputUsername)
 
@@ -106,7 +106,7 @@ func Test_E2E_App(t *testing.T) {
 	Convey("Given params", t, func() {
 		const (
 			expectedStatus = http.StatusOK
-			inputUsername  = `"Third Advert"`
+			inputUsername  = `"Third User"`
 		)
 		inputBody := fmt.Sprintf(`{"username": %s}`, inputUsername)
 

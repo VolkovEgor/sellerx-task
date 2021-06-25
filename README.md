@@ -1,4 +1,4 @@
-# Тестовое задание Advertising
+# Тестовое задание SellerX
 
 <!-- ToC start -->
 # Содержание
@@ -6,7 +6,6 @@
 1. [Описание задачи](#Описание-задачи)
 1. [Реализация](#Реализация)
 1. [Архитектура](#Архитектура)
-1. [Endpoints](#Endpoints)
 1. [Запуск](#Запуск)
 1. [Тестирование](#Тестирование)
 1. [Документация](#Документация)
@@ -158,7 +157,8 @@ make create_test_db
 Для просмотра документации Swagger необходимо запустить приложение и перейти по ссылке [http://127.0.0.1:9000/swagger/index.html](http://127.0.0.1:9000/swagger/index.html) 
 
 # Нагрузочное тестирование
-
+Нагрузочное тестирование проведено с помощью утилиты Apache Benchmark.
+Результаты представлены в файле [ab_results.md](./ab_results.md)
 
 # Примеры
 
@@ -173,127 +173,112 @@ $ curl --header "Content-Type: application/json" \
 ```
 **Тело ответа:**
 ```
-[
-    {
-        "id": 1,
-        "title": "Advert 1",
-        "main_photo": "link1",
-        "price": 10000
-    },
-    {
-        "id": 2,
-        "title": "Advert 2",
-        "main_photo": "link1",
-        "price": 60000
-    },
-    {
-        "id": 3,
-        "title": "Advert 3",
-        "main_photo": "link1",
-        "price": 30000
-    }
-]
-```
-
-### Создание чата
-
-**Запрос:**
-```
-$ curl GET localhost:9000/api/adverts?page=1&sort=price_asc
-```
-**Тело ответа:**
-```
 {
     "id":"74e6f204-4a47-40b9-aad1-8ea40887867f"
 }
 ```
 
-### 3. GET для _page=1_ и _sort_=date_desc
+### Создание чата
+**Запрос:**
+```
+$ curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"name": "chat_1", "users": ["2205ead6-79b6-45a0-93cf-9a1fdcb1f3d8", "74e6f204-4a47-40b9-aad1-8ea40887867f"]}' \
+  http://localhost:9000/chats/add
+```
+**Тело ответа:**
+```
+{
+    "id":"43e59947-0c56-44a3-b110-51a88f26fe75"
+}
+```
+
+### Создание сообщения
 
 **Запрос:**
 ```
-$ curl GET localhost:9000/api/adverts?page=1&sort=date_desc
+$ curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"chat": "43e59947-0c56-44a3-b110-51a88f26fe75", "author": "2205ead6-79b6-45a0-93cf-9a1fdcb1f3d8", "text": "hi"}' \
+  http://localhost:9000/messages/add
+```
+**Тело ответа:**
+```
+{
+    "id":"27f79a71-b8fd-4f04-a140-d71530945c80"
+}
+```
+
+### Получение всех чатов пользователя
+
+**Запрос:**
+```
+$ curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"user": "2205ead6-79b6-45a0-93cf-9a1fdcb1f3d8"}' \
+  http://localhost:9000/chats/get
 ```
 **Тело ответа:**
 ```
 [
     {
-        "id": 3,
-        "title": "Advert 3",
-        "main_photo": "link1",
-        "price": 30000
+        "id": "43e59947-0c56-44a3-b110-51a88f26fe75",
+        "name": "chat_1",
+        "users": [
+            "2205ead6-79b6-45a0-93cf-9a1fdcb1f3d8",
+            "74e6f204-4a47-40b9-aad1-8ea40887867f"
+        ],
+        "created_at": 1624600288,
+        "last_message_time": 1624600921
     },
     {
-        "id": 2,
-        "title": "Advert 2",
-        "main_photo": "link1",
-        "price": 60000
+        "id": "8e1ae287-8b99-4e25-9598-db5e6fc77a99",
+        "name": "Chat 1",
+        "users": [
+            "2205ead6-79b6-45a0-93cf-9a1fdcb1f3d8",
+            "08a1fb77-4d05-4b8a-a9f9-f606c3680516"
+        ],
+        "created_at": 400,
+        "last_message_time": 700
     },
     {
-        "id": 1,
-        "title": "Advert 1",
-        "main_photo": "link1",
-        "price": 10000
+        "id": "239998e6-b6b2-406f-994b-20a55e165a88",
+        "name": "Chat 2",
+        "users": [
+            "2205ead6-79b6-45a0-93cf-9a1fdcb1f3d8",
+            "08a1fb77-4d05-4b8a-a9f9-f606c3680516",
+            "ea4e8ba2-798f-4535-83e2-e7ae4e776136"
+        ],
+        "created_at": 500,
+        "last_message_time": 650
     }
 ]
 ```
-
-## Получение конкретного объявления
-
-### 1. GET для _id=1_ 
+### Получение всех сообщений в чате
 
 **Запрос:**
 ```
-$ curl GET localhost:9000/api/adverts/1
+$ curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"chat": "43e59947-0c56-44a3-b110-51a88f26fe75"}' \
+  http://localhost:9000/messages/get
 ```
 **Тело ответа:**
 ```
-{
-    "id": 1,
-    "title": "Advert 1",
-    "photos": [
-        "link1"
-    ],
-    "price": 10000
-}
-```
-### 2. GET для _id=1_ и _fields_=true
-
-**Запрос:**
-```
-$ curl GET localhost:9000/api/adverts/1?fields=true
-```
-**Тело ответа:**
-```
-{
-    "id": 1,
-    "title": "Advert 1",
-    "description": "Description 1",
-    "photos": [
-        "link1",
-        "link2",
-        "link3"
-    ],
-    "price": 10000
-}
-```
-
-## Создание объявления
-
-**Запрос:**
-```
-$ curl --location --request POST 'localhost:9000/api/adverts' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "title": "New advert",
-    "description": "Description of new advert",
-    "photos": ["link1", "link2"],
-    "price": 400000
-}'
-```
-**Тело ответа:**
-```
-{
-    "advert_id": 4
-}
+[
+    {
+        "id": "27f79a71-b8fd-4f04-a140-d71530945c80",
+        "chat_id": "43e59947-0c56-44a3-b110-51a88f26fe75",
+        "author_id": "2205ead6-79b6-45a0-93cf-9a1fdcb1f3d8",
+        "text": "hi",
+        "created_at": 1624600921
+    },
+    {
+        "id": "08dea60a-4e7d-4fcc-a209-748b423ee548",
+        "chat_id": "43e59947-0c56-44a3-b110-51a88f26fe75",
+        "author_id": "74e6f204-4a47-40b9-aad1-8ea40887867f",
+        "text": "How have you been?",
+        "created_at": 1624602090
+    }
+]
 ```

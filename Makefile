@@ -37,4 +37,4 @@ create_test_db:
 	pgpassword=1234 psql -h localhost -p 5436 -U postgres -tc "CREATE DATABASE postgres_test"
 
 insert_test_data:
-	pgpassword=1234 psql -h localhost -p 5436 -U postgres -d postgres -f ./scripts/insert_test_data.sql
+	pgpassword=1234 psql -h localhost -p 5436 -U postgres -d postgres -f ./test_scripts/test_data_insert.sql

@@ -62,7 +62,9 @@ func Test_E2E_App(t *testing.T) {
 
 			w := httptest.NewRecorder()
 			app.ServeHTTP(w, req)
-			json.Unmarshal([]byte(w.Body.String()), &userId1)
+			if err = json.Unmarshal(w.Body.Bytes(), &userId1); err != nil {
+				log.Fatalf(err.Error())
+			}
 
 			Convey("Then should be Ok", func() {
 				So(w.Code, ShouldEqual, expectedStatus)
@@ -89,7 +91,9 @@ func Test_E2E_App(t *testing.T) {
 
 			w := httptest.NewRecorder()
 			app.ServeHTTP(w, req)
-			json.Unmarshal([]byte(w.Body.String()), &userId2)
+			if err = json.Unmarshal(w.Body.Bytes(), &userId2); err != nil {
+				log.Fatalf(err.Error())
+			}
 
 			Convey("Then should be Ok", func() {
 				So(w.Code, ShouldEqual, expectedStatus)
@@ -116,7 +120,9 @@ func Test_E2E_App(t *testing.T) {
 
 			w := httptest.NewRecorder()
 			app.ServeHTTP(w, req)
-			json.Unmarshal([]byte(w.Body.String()), &userId3)
+			if err = json.Unmarshal(w.Body.Bytes(), &userId3); err != nil {
+				log.Fatalf(err.Error())
+			}
 
 			Convey("Then should be Ok", func() {
 				So(w.Code, ShouldEqual, expectedStatus)
@@ -148,7 +154,9 @@ func Test_E2E_App(t *testing.T) {
 
 			w := httptest.NewRecorder()
 			app.ServeHTTP(w, req)
-			json.Unmarshal([]byte(w.Body.String()), &chatId1)
+			if err = json.Unmarshal(w.Body.Bytes(), &chatId1); err != nil {
+				log.Fatalf(err.Error())
+			}
 
 			Convey("Then should be Ok", func() {
 				So(w.Code, ShouldEqual, expectedStatus)
@@ -183,7 +191,9 @@ func Test_E2E_App(t *testing.T) {
 
 			w := httptest.NewRecorder()
 			app.ServeHTTP(w, req)
-			json.Unmarshal([]byte(w.Body.String()), &chatId2)
+			if err = json.Unmarshal(w.Body.Bytes(), &chatId2); err != nil {
+				log.Fatalf(err.Error())
+			}
 
 			Convey("Then should be Ok", func() {
 				So(w.Code, ShouldEqual, expectedStatus)
@@ -215,7 +225,9 @@ func Test_E2E_App(t *testing.T) {
 
 			w := httptest.NewRecorder()
 			app.ServeHTTP(w, req)
-			json.Unmarshal([]byte(w.Body.String()), &messageId11)
+			if err = json.Unmarshal(w.Body.Bytes(), &messageId11); err != nil {
+				log.Fatalf(err.Error())
+			}
 
 			Convey("Then should be Ok", func() {
 				So(w.Code, ShouldEqual, expectedStatus)
@@ -247,7 +259,9 @@ func Test_E2E_App(t *testing.T) {
 
 			w := httptest.NewRecorder()
 			app.ServeHTTP(w, req)
-			json.Unmarshal([]byte(w.Body.String()), &messageId12)
+			if err = json.Unmarshal(w.Body.Bytes(), &messageId12); err != nil {
+				log.Fatalf(err.Error())
+			}
 
 			Convey("Then should be Ok", func() {
 				So(w.Code, ShouldEqual, expectedStatus)
@@ -279,7 +293,9 @@ func Test_E2E_App(t *testing.T) {
 
 			w := httptest.NewRecorder()
 			app.ServeHTTP(w, req)
-			json.Unmarshal([]byte(w.Body.String()), &messageId21)
+			if err = json.Unmarshal(w.Body.Bytes(), &messageId21); err != nil {
+				log.Fatalf(err.Error())
+			}
 
 			Convey("Then should be Ok", func() {
 				So(w.Code, ShouldEqual, expectedStatus)
@@ -321,7 +337,9 @@ func Test_E2E_App(t *testing.T) {
 			app.ServeHTTP(w, req)
 
 			var chats []*model.Chat
-			json.Unmarshal([]byte(w.Body.String()), &chats)
+			if err = json.Unmarshal(w.Body.Bytes(), &chats); err != nil {
+				log.Fatalf(err.Error())
+			}
 
 			Convey("Then should be Ok", func() {
 				So(w.Code, ShouldEqual, expectedStatus)
@@ -370,7 +388,9 @@ func Test_E2E_App(t *testing.T) {
 			app.ServeHTTP(w, req)
 
 			var chats []*model.Message
-			json.Unmarshal([]byte(w.Body.String()), &chats)
+			if err = json.Unmarshal(w.Body.Bytes(), &chats); err != nil {
+				log.Fatalf(err.Error())
+			}
 
 			Convey("Then should be Ok", func() {
 				So(w.Code, ShouldEqual, expectedStatus)
@@ -414,7 +434,9 @@ func Test_E2E_App(t *testing.T) {
 			app.ServeHTTP(w, req)
 
 			var chats []*model.Message
-			json.Unmarshal([]byte(w.Body.String()), &chats)
+			if err = json.Unmarshal(w.Body.Bytes(), &chats); err != nil {
+				log.Fatalf(err.Error())
+			}
 
 			Convey("Then should be Ok", func() {
 				So(w.Code, ShouldEqual, expectedStatus)

@@ -36,7 +36,6 @@ func (s *ChatService) Create(chat *model.Chat) (string, error) {
 		if set[userId] {
 			return "", errMes.ErrRecurringUsers
 		}
-		set[userId] = true
 
 		if err := s.userRepo.ExistenceCheck(userId); err != nil {
 			if err == sql.ErrNoRows {
@@ -44,6 +43,7 @@ func (s *ChatService) Create(chat *model.Chat) (string, error) {
 			}
 			return "", err
 		}
+		set[userId] = true
 	}
 
 	chat.CreatedAt = time.Now().Unix()

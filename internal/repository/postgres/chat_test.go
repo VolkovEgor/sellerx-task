@@ -188,8 +188,6 @@ func TestChatPg_GetAllForUser(t *testing.T) {
 				},
 			},
 			mock: func(args args) {
-				mock.ExpectBegin()
-
 				chatId1 := "00000000-0000-0000-0000-000000000001"
 				chatId2 := "00000000-0000-0000-0000-000000000002"
 				rows := sqlmock.NewRows([]string{"id", "name", "created_at", "last_message_time"}).
@@ -209,8 +207,6 @@ func TestChatPg_GetAllForUser(t *testing.T) {
 					AddRow("00000000-0000-0000-0000-000000000003")
 				mock.ExpectQuery("SELECT (.+) FROM chat_users").
 					WithArgs(chatId2).WillReturnRows(rows)
-
-				mock.ExpectCommit()
 			},
 		},
 		{
@@ -220,11 +216,9 @@ func TestChatPg_GetAllForUser(t *testing.T) {
 			},
 			wantErr: true,
 			mock: func(args args) {
-				mock.ExpectBegin()
 				mock.ExpectQuery("SELECT (.+) FROM (.+)").
 					WithArgs(args.userId).
 					WillReturnError(fmt.Errorf("Some error"))
-				mock.ExpectCommit()
 			},
 		},
 		{
@@ -234,8 +228,6 @@ func TestChatPg_GetAllForUser(t *testing.T) {
 			},
 			wantErr: true,
 			mock: func(args args) {
-				mock.ExpectBegin()
-
 				chatId1 := "00000000-0000-0000-0000-000000000001"
 				chatId2 := "00000000-0000-0000-0000-000000000002"
 				rows := sqlmock.NewRows([]string{"id", "name", "created_at", "last_message_time"}).
@@ -247,8 +239,6 @@ func TestChatPg_GetAllForUser(t *testing.T) {
 				mock.ExpectQuery("SELECT (.+) FROM chat_users").
 					WithArgs(chatId1).
 					WillReturnError(fmt.Errorf("Some error"))
-
-				mock.ExpectCommit()
 			},
 		},
 	}

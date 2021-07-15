@@ -147,7 +147,35 @@ func TestMessageService_Create(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "Ok",
+			name: "User is not in chat",
+			input: args{
+				message: &model.Message{
+					ChatId:   "00000000-0000-0000-0000-000000000001",
+					AuthorId: "00000000-0000-0000-0000-000000000001",
+					Text:     "Message 1",
+				},
+			},
+			chatMock: func(r *mock_repositories.MockChat, chatId string) {
+				chat := &model.Chat{
+					Id:   "00000000-0000-0000-0000-000000000001",
+					Name: "Chat 1",
+					Users: []string{
+						"00000000-0000-0000-0000-000000000002",
+						"00000000-0000-0000-0000-000000000003",
+					},
+					CreatedAt:       int64(^uint64(0) >> 1), // max int64 value
+					LastMessageTime: 200,
+				}
+				r.EXPECT().GetById(chatId).Return(chat, nil)
+			},
+			userMock: func(r *mock_repositories.MockUser, userId string) {
+				r.EXPECT().ExistenceCheck(userId).Return(nil)
+			},
+			mock:    func(r *mock_repositories.MockMessage, args args) {},
+			wantErr: true,
+		},
+		{
+			name: "Wrong message creation time",
 			input: args{
 				message: &model.Message{
 					ChatId:   "00000000-0000-0000-0000-000000000001",
@@ -174,7 +202,6 @@ func TestMessageService_Create(t *testing.T) {
 			mock:    func(r *mock_repositories.MockMessage, args args) {},
 			wantErr: true,
 		},
-
 		{
 			name: "Repo Error",
 			input: args{

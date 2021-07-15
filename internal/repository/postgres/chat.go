@@ -51,11 +51,6 @@ func (r *ChatPg) Create(chat *model.Chat) (string, error) {
 
 func (r *ChatPg) GetAllForUser(userId string) ([]*model.Chat, error) {
 	var chats []*model.Chat
-	tx, err := r.db.Begin()
-	if err != nil {
-		return nil, err
-	}
-
 	query := fmt.Sprintf(`
 		SELECT tmp.id, tmp.name, tmp.created_at, last_message_time
 		FROM
@@ -77,9 +72,8 @@ func (r *ChatPg) GetAllForUser(userId string) ([]*model.Chat, error) {
 			ORDER BY last_message_time DESC 
 		) AS tmp`, messagesTable, chatsTable, chatUsersTable)
 
-	err = r.db.Select(&chats, query, userId)
+	err := r.db.Select(&chats, query, userId)
 	if err != nil {
-		_ = tx.Rollback()
 		return nil, err
 	}
 
@@ -88,19 +82,25 @@ func (r *ChatPg) GetAllForUser(userId string) ([]*model.Chat, error) {
 		err = r.db.Select(&chat.Users, query, chat.Id)
 
 		if err != nil {
-			_ = tx.Rollback()
 			return nil, err
 		}
 	}
 
-	return chats, tx.Commit()
+	return chats, nil
 }
 
 func (r *ChatPg) GetById(chatId string) (*model.Chat, error) {
 	chat := &model.Chat{}
 	query := fmt.Sprintf(`SELECT id, name, created_at FROM %s WHERE id = $1`, chatsTable)
 	row := r.db.QueryRow(query, chatId)
+
 	err := row.Scan(&chat.Id, &chat.Name, &chat.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+
+	query = fmt.Sprintf(`SELECT user_id FROM %s WHERE chat_id = $1`, chatUsersTable)
+	err = r.db.Select(&chat.Users, query, chatId)
 	return chat, err
 }
 

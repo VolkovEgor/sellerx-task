@@ -51,6 +51,18 @@ func (s *MessageService) Create(message *model.Message) (string, error) {
 		return "", err
 	}
 
+	userIsFound := false
+	for _, user := range chat.Users {
+		if user == message.AuthorId {
+			userIsFound = true
+			break
+		}
+	}
+
+	if !userIsFound {
+		return "", errMes.ErrUserIsNotInChat
+	}
+
 	message.CreatedAt = time.Now().Unix()
 	if message.CreatedAt < chat.CreatedAt {
 		return "", errMes.ErrWrongMesCreationTime

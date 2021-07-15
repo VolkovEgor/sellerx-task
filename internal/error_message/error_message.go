@@ -8,6 +8,7 @@ var (
 	ErrWrongMesText         = errors.New("message must not be empty")
 	ErrNoChatUsers          = errors.New("chat must contain least one user")
 	ErrRecurringUsers       = errors.New("chat users must not repeat themselves")
+	ErrUserIsNotInChat      = errors.New("user is not in chat")
 	ErrWrongMesCreationTime = errors.New("message time must be longer than chat time")
 	ErrUserNotExists        = errors.New("user not exists")
 	ErrChatNotExists        = errors.New("chat not exists")

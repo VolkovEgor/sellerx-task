@@ -267,7 +267,7 @@ func TestMessageService_GetAllForChat(t *testing.T) {
 						ChatId:    "00000000-0000-0000-0000-000000000001",
 						AuthorId:  "00000000-0000-0000-0000-000000000001",
 						Text:      "Message 2",
-						CreatedAt: 300,
+						CreatedAt: 100,
 					},
 					{
 						Id:        "00000000-0000-0000-0000-000000000001",
@@ -285,7 +285,7 @@ func TestMessageService_GetAllForChat(t *testing.T) {
 					ChatId:    "00000000-0000-0000-0000-000000000001",
 					AuthorId:  "00000000-0000-0000-0000-000000000001",
 					Text:      "Message 2",
-					CreatedAt: 300,
+					CreatedAt: 100,
 				},
 				{
 					Id:        "00000000-0000-0000-0000-000000000001",

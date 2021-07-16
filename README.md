@@ -133,13 +133,7 @@ make build
 make run
 ```
 
-Если приложение запускается впервые, необходимо применить миграции к базе данных:
-
-```
-make migrate_up
-```
-
-Для миграций используется [golang-migrate/migrate CLI](https://github.com/golang-migrate/migrate/tree/master/cmd/migrate#installation).
+Миграции накатываются автоматически при запуске приложения.
 
 # Тестирование
 

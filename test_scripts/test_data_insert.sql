@@ -68,7 +68,3 @@ CREATE OR REPLACE FUNCTION data_insert() RETURNS void AS $$
 $$ LANGUAGE plpgsql;
 
 SELECT data_insert()
-
-
-
-

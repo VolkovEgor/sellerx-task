@@ -4,6 +4,7 @@ services:
   app:
     restart: always
     build: ./
+    command: ./wait-for-postgres.sh db ./app docker_config
     ports:
       - 9000:9000
     depends_on:
@@ -29,4 +30,3 @@ services:
     volumes:
       - ./migrations:/migrations
     command: ["-path", "/migrations", "-database", "postgres://postgres:1234@db:5432/postgres?sslmode=disable", "up"]
-    
